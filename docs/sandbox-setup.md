@@ -57,6 +57,21 @@ member ID). Both commands seed synthetic activity and fire a real DM via
 the MCP `send_private_nudge` tool — safe to re-run repeatedly while
 rehearsing the demo video.
 
+## Keep the app process running
+
+State (opt-in status, activity history, nudge cooldowns) is held
+**in-memory only** — every time `npm run dev` restarts, it's wiped. That
+means:
+
+- Anyone testing (including you) needs to re-run `/pace optin` after any
+  restart before the live burst detection will do anything.
+- If you restart the app between now and when judges test it, re-confirm
+  your own opt-in still works before pointing them at it, and consider
+  leaving the process running continuously (e.g. in a background terminal
+  or `tmux`/`screen` session) rather than restarting it casually — a
+  silent "nothing happened" from a wiped-out opt-in is easy to mistake for
+  a bug. See `docs/test-sandbox.md` for the judge-facing test itself.
+
 ## 6. Grant judge test access
 
 Add the following as collaborators/members with test access to your
