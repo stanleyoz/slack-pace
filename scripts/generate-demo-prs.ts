@@ -27,7 +27,6 @@ async function main() {
   const count = countArg ? parseInt(countArg, 10) : 12;
 
   const logFile = path.join(process.cwd(), "demo", "activity-log.md");
-  await fs.mkdir(path.dirname(logFile), { recursive: true });
 
   console.log(`Generating ${count} real demo PRs against this repo...`);
 
@@ -39,6 +38,10 @@ async function main() {
     try {
       await run("git", ["checkout", "-b", branch, "main"]);
 
+      // Recreated every iteration (not just once up front) because each
+      // branch is cut fresh from `main`, which won't have this directory
+      // tracked until the first PR merges.
+      await fs.mkdir(path.dirname(logFile), { recursive: true });
       const line = `- Burst simulation event #${i} at ${new Date().toISOString()}\n`;
       await fs.appendFile(logFile, line, "utf8");
 
@@ -64,7 +67,7 @@ async function main() {
       ]);
       console.log(`[${i}/${count}] created: ${prUrl}`);
 
-      await run("gh", ["pr", "merge", branch, "--squash", "--delete-branch", "--yes"]);
+      await run("gh", ["pr", "merge", branch, "--squash", "--delete-branch"]);
       console.log(`[${i}/${count}] merged & branch deleted`);
 
       await run("git", ["checkout", "main"]);
