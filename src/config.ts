@@ -27,4 +27,10 @@ export const config = {
   // Concept C — weekly digest thresholds
   nightThresholdHour: 21, // events after this local hour count as "worked late"
   breakGapMinutesThreshold: 90, // gap beyond this counts as a "break" for streak purposes
+
+  // GitHub PR activity source — see src/github/githubActivity.ts. No token
+  // lives here; scripts shell out to the already-authenticated `gh` CLI.
+  githubRepo: process.env.GITHUB_REPO ?? "",
+  githubUsername: process.env.GITHUB_USERNAME ?? "",
+  demoUserId: process.env.PACE_DEMO_USER_ID ?? "",
 } as const;
