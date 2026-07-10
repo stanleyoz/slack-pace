@@ -1,0 +1,51 @@
+{
+  "display_information": {
+    "name": "Pace",
+    "description": "A caring nudge for people burning out at LLM speed.",
+    "background_color": "#2b2d42"
+  },
+  "features": {
+    "bot_user": {
+      "display_name": "Pace",
+      "always_online": true
+    },
+    "slash_commands": [
+      {
+        "command": "/pace",
+        "description": "Manage your Pace check-ins",
+        "usage_hint": "optin | optout | status",
+        "should_escape": false
+      }
+    ],
+    "app_home": {
+      "home_tab_enabled": true,
+      "messages_tab_enabled": true,
+      "messages_tab_read_only_enabled": true
+    }
+  },
+  "oauth_config": {
+    "scopes": {
+      "bot": [
+        "chat:write",
+        "im:write",
+        "im:history",
+        "commands",
+        "users:read"
+      ]
+    }
+  },
+  "settings": {
+    "event_subscriptions": {
+      "bot_events": [
+        "message.im",
+        "app_home_opened"
+      ]
+    },
+    "interactivity": {
+      "is_enabled": true
+    },
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": true,
+    "token_rotation_enabled": false
+  }
+}

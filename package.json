@@ -1,0 +1,28 @@
+{
+  "name": "pace-machine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pace — a caring nudge for people burning out at LLM speed. Slack Agent for Good.",
+  "license": "MIT",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "ts-node src/app.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "demo:burst": "ts-node scripts/trigger-burst-demo.ts",
+    "demo:digest": "ts-node scripts/trigger-digest-demo.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.11.0",
+    "@slack/bolt": "^4.2.0",
+    "dotenv": "^16.4.7",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}
