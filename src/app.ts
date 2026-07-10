@@ -39,7 +39,16 @@ app.message(async ({ message }) => {
   const pattern = await mcpClient.getUserActivityPattern(userId);
   const burst = (pattern as { burst: unknown }).burst;
   if (burst) {
-    await mcpClient.sendPrivateNudge(userId, "burst_nudge", burst as object);
+    const result = await mcpClient.sendPrivateNudge(userId, "burst_nudge", burst as object);
+    if (result.ok) {
+      console.log(`[live] burst nudge sent to ${userId}`);
+    } else {
+      // Surfaced explicitly because a silent skip here (not opted in,
+      // still in cooldown) is otherwise indistinguishable from "nothing
+      // happened yet" — this exact ambiguity caused real confusion while
+      // testing the live path.
+      console.log(`[live] burst detected for ${userId} but nudge skipped:`, result);
+    }
   }
 });
 
