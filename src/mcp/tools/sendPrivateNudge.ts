@@ -51,6 +51,13 @@ export function registerSendPrivateNudge(server: McpServer, deps: SendPrivateNud
             structuredContent: { ok: false, reason: "cooldown" },
           };
         }
+        // Claim the cooldown slot immediately, before the awaited Slack
+        // calls below — otherwise two burst_nudge calls arriving close
+        // together (e.g. a live user sending several quick messages) can
+        // both pass the check above before either has recorded a
+        // timestamp, producing duplicate nudges. This makes the window
+        // effectively zero instead of spanning two network round-trips.
+        memoryStore.setLastNudgeSentAt(userId, Date.now());
       }
 
       const built =
@@ -72,10 +79,6 @@ export function registerSendPrivateNudge(server: McpServer, deps: SendPrivateNud
         text: built.text,
         blocks: built.blocks,
       });
-
-      if (template === "burst_nudge") {
-        memoryStore.setLastNudgeSentAt(userId, Date.now());
-      }
 
       return {
         content: [{ type: "text", text: `Sent ${template} nudge to ${userId}.` }],

@@ -53,6 +53,32 @@ describe("demo smoke: burst nudge (Concept A)", () => {
     expect(actionIds).toContain("nudge_block_walk");
   });
 
+  it("does not send duplicate nudges when two calls race concurrently", async () => {
+    // Regression test: found live when a user sent several DMs in quick
+    // succession — each message independently triggered a burst check,
+    // and the cooldown used to be recorded only after two awaited Slack
+    // calls, leaving a window where both calls could pass the cooldown
+    // check before either had recorded a timestamp.
+    const { webClient, postMessage } = makeFakeWebClient();
+    const mcpClient = new PaceMcpClient(webClient);
+
+    memoryStore.addEvents(userId, generateBurstEvents(userId));
+    const pattern = (await mcpClient.getUserActivityPattern(userId)) as { burst: unknown };
+
+    const [first, second] = await Promise.all([
+      mcpClient.sendPrivateNudge(userId, "burst_nudge", pattern.burst as object),
+      mcpClient.sendPrivateNudge(userId, "burst_nudge", pattern.burst as object),
+    ]);
+
+    const results = [first, second];
+    const sent = results.filter((r) => r.ok);
+    const skipped = results.filter((r) => !r.ok);
+
+    expect(sent).toHaveLength(1);
+    expect(skipped).toHaveLength(1);
+    expect(postMessage).toHaveBeenCalledTimes(1);
+  });
+
   it("skips sending if the user has not opted in", async () => {
     consentStore.optOut(userId);
     const { webClient, postMessage } = makeFakeWebClient();
