@@ -24,7 +24,7 @@ like a caring nudge rather than a surveillance tool, which matters both ethicall
 
 ## Architecture
 
-
+```
 Slack Workspace (Events/Interactivity, Socket Mode)
         │
         ▼
@@ -53,6 +53,7 @@ Slack Workspace (Events/Interactivity, Socket Mode)
         ▼
   Store layer
    └─ store/memoryStore.ts (in-memory event + cooldown store; swappable for a real DB later)
+```
 
 **Why MCP is the real integration point, not decorative:** the Bolt app never calls detection
 logic directly — every action goes through the MCP client → MCP server → tool boundary. This
