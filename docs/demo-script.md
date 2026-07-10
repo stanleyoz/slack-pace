@@ -13,14 +13,25 @@ Show the App Home tab: opt-in toggle, privacy principles list. Click
 public posts, no manager visibility into individuals."
 
 **0:35–1:15 — Concept A: the burst nudge (hero moment)**
-Run in terminal:
-```
-npm run demo:burst -- --user=<your-user-id>
-```
-Cut to Slack: the DM arrives. Read the message aloud as it appears:
-"You've sent 47 messages and 6 PRs in the last 3 hours, back to back, no
-gap over 4 min. That's not how humans code, that's how I code." Click
-**Block tomorrow 9–10am for a walk**. Show the ephemeral confirmation.
+
+Two options here — pick whichever demos more reliably on the day:
+
+- **Real GitHub option (stronger, shows genuine data):** show the
+  terminal running `npm run demo:generate-prs -- --count=12` (or speed
+  through it in the edit), then `npm run demo:poll-github -- --user=<your-user-id>`.
+  Narrate: "This isn't seeded — Pace just read 12 real merged PRs off this
+  repo's GitHub history and detected the burst itself." Cut to the actual
+  GitHub PR list briefly to prove it's real, then to Slack.
+- **Seeded fallback (guaranteed to work, no live GitHub dependency):**
+  ```
+  npm run demo:burst -- --user=<your-user-id>
+  ```
+
+Cut to Slack: the DM arrives. Read the message aloud as it appears (exact
+counts vary by which path you used): "You've sent N messages and N PRs in
+the last 3 hours, back to back, no gap over 4 min. That's not how humans
+code, that's how I code." Click **Block tomorrow 9–10am for a walk**. Show
+the ephemeral confirmation.
 
 **1:15–1:35 — Architecture beat**
 Briefly show `docs/architecture.md`'s diagram (or narrate over it): "Every
@@ -52,6 +63,9 @@ copilots in the world don't mean we should burn out at their pace."
 
 - [ ] Run `npm run demo:burst` and `npm run demo:digest` at least once the
       day before recording to confirm timing and DM rendering.
+- [ ] If using the real GitHub option, run `npm run demo:generate-prs` and
+      `npm run demo:poll-github` once beforehand too — confirm `gh auth status`
+      is logged in and `.env` has `GITHUB_REPO`/`GITHUB_USERNAME` set.
 - [ ] Confirm terminal font/zoom is legible on recording.
 - [ ] Record 2+ takes; keep the cleanest.
 - [ ] Export/host on YouTube, Vimeo, Facebook Video, or Youku per the

@@ -28,6 +28,10 @@ enforced in code, not just promised in this README.
 - **Aggregate-only team view.** `get_team_aggregate_wellbeing` returns
   anonymized stats across opted-in users only — it has no per-user
   parameter, so individual data cannot be requested through it.
+- **Real GitHub PR activity, not just seeded data.** `src/github/githubActivity.ts`
+  polls the GitHub REST API (via the already-authenticated `gh` CLI — no
+  token stored in this repo) and feeds real PR events into the exact same
+  `detectBurst()` used everywhere else. See "Real GitHub integration" below.
 
 ## Architecture
 
@@ -57,6 +61,9 @@ flowchart LR
   as a standalone `StdioServerTransport` process instead.
 - **Block Kit** for all interactive UI (buttons, modals, App Home).
 - **Zod** for MCP tool input schemas.
+- **GitHub CLI (`gh`)** as the real activity data source — shelled out to,
+  not wrapped in a token-holding API client, so no GitHub credential ever
+  lives in this codebase.
 - **Vitest** for detection-logic and demo-pipeline tests.
 
 ## Setup / sandbox instructions
@@ -84,6 +91,27 @@ npm run demo:digest -- --user=<your-slack-user-id>
 Both seed synthetic, deterministic activity and fire a real DM into your
 sandbox workspace via the `send_private_nudge` MCP tool — reproducible on
 demand, no need to wait on real usage history.
+
+### Real GitHub integration
+
+Beyond the seeded path above, Pace can also detect a burst from **genuine**
+GitHub PR activity — no synthetic data involved:
+
+```bash
+# Requires `gh auth login` already done, and GITHUB_REPO / GITHUB_USERNAME
+# set in .env (see .env.example)
+npm run demo:generate-prs -- --count=12   # creates + squash-merges real PRs
+npm run demo:poll-github -- --user=<your-slack-user-id>
+```
+
+`demo:generate-prs` opens a handful of small, clearly-labeled demo PRs
+against this repo in rapid succession and squash-merges each one.
+`demo:poll-github` then reads them back via the real GitHub API, runs them
+through the same `detectBurst()` as the seeded path, and — if they form a
+genuine burst — fires the real `send_private_nudge` MCP tool. This is what
+was actually used to validate the detector end-to-end: 12 real merged PRs
+produced a live Slack DM reading "You've sent 0 messages and 12 PRs in the
+last 3 hours, back to back, no gap over 4 min."
 
 ## Demo video
 

@@ -37,7 +37,27 @@ flowchart LR
     T3 --> Store
 
     Seed[seed/seedEvents.ts\nseed/seedWeek.ts] -.->|demo trigger scripts| Store
+    GitHub[GitHub REST API\nvia gh CLI] -->|src/github/githubActivity.ts| Store
 ```
+
+## Two data sources feeding the same detector
+
+`detectBurst()` and `computeWeeklyDigest()` don't know or care where their
+`ActivityEvent[]` input came from — there are two independent producers:
+
+- **Seeded** (`src/seed/seedEvents.ts`, `src/seed/seedWeek.ts`) —
+  deterministic synthetic data, used by `scripts/trigger-burst-demo.ts` and
+  `scripts/trigger-digest-demo.ts` for a reliable, reproducible demo
+  regardless of real usage history.
+- **Real GitHub PR activity** (`src/github/githubActivity.ts`) — shells out
+  to the already-authenticated `gh` CLI (`gh pr list --json ...`), so no
+  GitHub token is ever read into this codebase's env or logs. Raw PRs are
+  mapped to `ActivityEvent{type:'pr'}` records and run through the exact
+  same `detectBurst()`. `scripts/poll-github-and-nudge.ts` is the live
+  version of the burst-nudge trigger, sourced from genuine repo activity
+  instead of synthetic events — `scripts/generate-demo-prs.ts` produces
+  that real activity by creating and squash-merging a handful of small PRs
+  in rapid succession.
 
 ## Why an in-process MCP server
 
