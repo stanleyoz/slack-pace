@@ -4,26 +4,40 @@ Self-serve, ~2 minutes, no terminal or GitHub access needed — this
 triggers a real, live Slack DM using the same detection code as the rest
 of the project, not a canned demo.
 
-## 1. Open a DM with Pace
+## 1. Open a DM with Pace — not the shared channel
 
-You've been added to `#pace-judge-testing` in the sandbox workspace. Click
-**Pace** in that channel's member list (or search for it) to open a direct
-message.
+You've been added to a shared channel in the sandbox workspace so Pace can
+see you as a guest. **Do not run these steps by posting in that channel**
+— Pace only listens for direct messages (`message.im`), by design, to
+avoid needing broad channel-reading permissions. Messages posted in the
+channel itself are invisible to Pace and nothing will happen.
+
+To open an actual 1:1 DM:
+- Press **Cmd/Ctrl+K**, type **Pace**, and select it — this opens the
+  direct conversation, distinct from the channel, **or**
+- Click directly on the **"Pace"** name/avatar wherever it appears (e.g.
+  an `@Pace` mention) to open its profile card, then click **Message**.
+
+You'll know you're in the right place if the conversation header shows
+just **Pace** (a 1:1 DM), not the channel name.
 
 ## 2. Opt in
 
-Send:
+**In that DM**, send:
 ```
 /pace optin
 ```
 Pace replies privately confirming you're opted in. Nothing happens until
-this step — opt-in is required by design.
+this step — opt-in is required by design. (If you ran this in the
+channel by mistake earlier, run it again here — state doesn't carry
+over.)
 
 ## 3. Trigger a burst
 
-Send Pace **10 or more messages within a few minutes**, with no gap
-longer than 4 minutes between them. Content doesn't matter — the fastest
-way is to paste and send each of these one at a time, quickly:
+**Still in the DM**, send Pace **10 or more messages within a few
+minutes**, with no gap longer than 4 minutes between them. Content
+doesn't matter — the fastest way is to paste and send each of these one
+at a time, quickly:
 
 ```
 1
