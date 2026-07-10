@@ -21,3 +21,4 @@
 - Burst simulation event #9 at 2026-07-10T12:40:33.938Z
 - Burst simulation event #10 at 2026-07-10T12:40:44.616Z
 - Burst simulation event #11 at 2026-07-10T12:40:54.544Z
+- Burst simulation event #12 at 2026-07-10T12:41:04.760Z
