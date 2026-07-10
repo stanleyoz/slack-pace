@@ -71,21 +71,21 @@ adoption friction, which is itself part of the "for Good" pitch (help has to be 
 ## Evaluation: Will Pace actually help workers in practice?
 
 **User workflow as designed:**
-1. Worker opts in via `/pace optin` or App Home toggle — friction is low (native Slack surfaces, no separate insta>
+1. Worker opts in via `/pace optin` or App Home toggle — friction is low (native Slack surfaces, no separate install or dashboard).
 2. Pace passively watches message/PR timestamp patterns.
-3. On a detected burst (10+ events, <4min gaps, 3hr window), user gets a private DM naming the pattern, with three>
+3. On a detected burst (10+ events, <4min gaps, 3hr window), user gets a private DM naming the pattern, with three quick-response buttons (dismiss, snooze, block recovery time).
 4. Weekly, a private digest DM summarizes late nights, longest no-break streak, tone trend.
 5. `/pace optout` disables it anytime.
 
 **Where this is likely to genuinely help:**
-- **Framing is the strongest asset.** "That's not how humans code, that's how I code" names something real and rar>
-- **Low adoption friction** (opt-in, native to tools already open) removes the biggest reason wellness tools go un>
-- **Privacy-by-construction (no manager visibility, DM-only)** matters practically, not just ethically: a tool emp>
+- **Framing is the strongest asset.** "That's not how humans code, that's how I code" names something real and rarely said aloud — most burnout tooling talks about hours, not pace, and this reframing is what could actually make someone stop and think.
+- **Low adoption friction** (opt-in, native to tools already open) removes the biggest reason wellness tools go unused: a separate app nobody remembers to open.
+- **Privacy-by-construction (no manager visibility, DM-only)** matters practically, not just ethically: a tool employees don't trust to stay private won't get honest, sustained usage.
 
 **Where practical benefit is uncertain — worth the user's attention before further build investment:**
-- **The nudge has no teeth.** All three response buttons are essentially acknowledgments — "block tomorrow 9-10am >
-- **Detection threshold is arbitrary and easily gamed/missed.** 10 events/3hrs/4min gaps is a heuristic tuned for >
-- **No loop-closing mechanism.** There's no evidence in the design that a dismissed/snoozed nudge changes future b>
-- **The demand-side of burnout isn't addressed.** The tool nudges the individual to self-regulate but does nothing>
+- **The nudge has no teeth.** All three response buttons are essentially acknowledgments — "block tomorrow 9-10am for a walk" is a simulated calendar write, not a real one, so nothing actually stops the user from continuing the same pace five minutes later.
+- **Detection threshold is arbitrary and easily gamed/missed.** 10 events/3hrs/4min gaps is a heuristic tuned for a convincing demo, not validated against real burnout research — different roles and working styles have very different "normal" paces.
+- **No loop-closing mechanism.** There's no evidence in the design that a dismissed/snoozed nudge changes future behavior — it's a single point-in-time notice, not a habit-forming feedback loop.
+- **The demand-side of burnout isn't addressed.** The tool nudges the individual to self-regulate but does nothing about the workload, deadline pressure, or manager expectations actually driving the pace in the first place.
 
-**Bottom line:** the concept is well-designed for *hackathon judging* (privacy-by-construction is genuinely differ>
+**Bottom line:** the concept is well-designed for *hackathon judging* (privacy-by-construction is genuinely differentiated, and the framing is memorable), but real-world efficacy would depend on closing the loop past a single nudge and validating detection thresholds against actual burnout research rather than demo-tuned heuristics.
