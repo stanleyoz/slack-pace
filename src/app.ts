@@ -22,14 +22,25 @@ registerActionHandlers(app);
 registerCommandHandlers(app);
 registerHomeHandlers(app);
 
-// Passive activity capture from real DM traffic, feeding Concept A/C
-// detection. Seed scripts (src/seed/*) are the primary/reliable path for
-// demo recording; this listener lets the bot also react to genuine usage.
+// Live activity capture from real DM traffic, feeding Concept A detection
+// in real time — this is what lets anyone (including a judge with no
+// terminal/GitHub access) self-serve trigger a real nudge just by DMing
+// Pace quickly enough, on top of the CLI-driven demo paths in scripts/*.
+// Consent and cooldown are enforced inside send_private_nudge itself, so
+// this listener doesn't need to duplicate either check.
 app.message(async ({ message }) => {
   if (message.subtype || !("user" in message) || !message.user) return;
-  memoryStore.addEvents(message.user, [
-    { userId: message.user, type: "message", ts: Number(message.ts) * 1000, text: "text" in message ? message.text : undefined },
+  const userId = message.user;
+
+  memoryStore.addEvents(userId, [
+    { userId, type: "message", ts: Number(message.ts) * 1000, text: "text" in message ? message.text : undefined },
   ]);
+
+  const pattern = await mcpClient.getUserActivityPattern(userId);
+  const burst = (pattern as { burst: unknown }).burst;
+  if (burst) {
+    await mcpClient.sendPrivateNudge(userId, "burst_nudge", burst as object);
+  }
 });
 
 (async () => {
