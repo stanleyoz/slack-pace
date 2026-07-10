@@ -57,20 +57,42 @@ member ID). Both commands seed synthetic activity and fire a real DM via
 the MCP `send_private_nudge` tool — safe to re-run repeatedly while
 rehearsing the demo video.
 
-## Keep the app process running
+## Keeping the app running for judging (Railway deployment)
 
-State (opt-in status, activity history, nudge cooldowns) is held
-**in-memory only** — every time `npm run dev` restarts, it's wiped. That
-means:
+Socket Mode requires a live, continuously-running process — it can't run
+"on demand." Rather than depend on a laptop staying on for the ~1-2 week
+judging window, Pace is deployed to **Railway** as an always-on
+background service, so it stays reachable regardless of local machine
+state.
 
-- Anyone testing (including you) needs to re-run `/pace optin` after any
-  restart before the live burst detection will do anything.
-- If you restart the app between now and when judges test it, re-confirm
-  your own opt-in still works before pointing them at it, and consider
-  leaving the process running continuously (e.g. in a background terminal
-  or `tmux`/`screen` session) rather than restarting it casually — a
-  silent "nothing happened" from a wiped-out opt-in is easy to mistake for
-  a bug. See `docs/test-sandbox.md` for the judge-facing test itself.
+```bash
+railway login              # browserless flow if no local browser access
+railway init                # first time only
+railway service pace-machine  # link the CLI to the service
+railway variable set KEY --stdin --skip-deploys < <(printf '%s' "$VALUE")  # per secret, or see below
+railway up --detach
+```
+
+Required variables on the Railway service (same values as `.env`, minus
+anything empty): `SLACK_BOT_TOKEN`, `SLACK_APP_TOKEN`,
+`SLACK_SIGNING_SECRET`, `GITHUB_REPO`, `GITHUB_USERNAME`,
+`PACE_DEMO_USER_ID`. Set each via `--stdin` (never as a plain `--set
+KEY=value`) so the value never lands in shell history or command output.
+
+Confirm it's live:
+```bash
+railway status    # should show pace-machine: ● Online
+```
+
+**State is still in-memory only** — a Railway redeploy wipes it exactly
+like a local restart does. Anyone testing (including you) needs to re-run
+`/pace optin` after any redeploy before live burst detection does
+anything. See `docs/test-sandbox.md` for the judge-facing test itself.
+
+If you also run `npm run dev` locally at the same time, both processes
+hold independent Socket Mode connections and independent in-memory state
+— fine for local debugging, but don't expect opt-in on one to carry over
+to the other.
 
 ## 6. Grant judge test access
 
